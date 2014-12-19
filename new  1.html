@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:sourceDocument="C:\Users\beelliot\Desktop\TempDoc.docx" xml:lang="en-us" MadCap:lastBlockDepth="4" MadCap:lastHeight="2042" MadCap:lastWidth="941">
+    <head><title></title>
+        <link href="../Resources/Stylesheets/TempDoc1.css" rel="stylesheet" />
+    </head>
+    <body>
+        <h2>Zip the new project </h2>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li>Go to the location of the new build<p>C:\Users\beelliot\Documents\My Projects\DCA DC Docs1</p></li>
+        	<li>Drill down to the Web Output folder <p>\Output\beelliot\Online Output\Website Output</p></li>
+            <li>Zip the "Website Output" folder.</li>
+            <li>Rename it to "WebOutput" (or something with no spaces).</li>
+            <li>Put the zip on C &gt; Program Files</li>			
+		</ol>
+
+        <h2>Getting the build onto the Dev desktop</h2>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li>Open PowerShell.</li>
+            <li>Type cd 'C:\Program Files (x86)'</li>
+            <li>Type cd .\PuTTy</li>
+            <li>Type: <p>.\pscp.exe c:\WebOutput.zip beelliot@gilliam.desktop.amazon.com:/DCA-DC-Docs/dc.</p></li>
+        </ol>
+		
+        <h2>Prep the zip</h2>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li>To log onto the Dev desktop:<ol style="list-style-type: lower-alpha;margin-left: 72pt;" start="1">
+				<ol>
+            	<li>Open PuTTy</li>
+            	<li>Use Host Name: gilliam.desktop.amazon.com</li>
+            	<li>Click Open</li>
+            	<li>Log in with your corporate username</li></li></ol>
+            <li>Type cd /DCA-DC-Docs</li>
+            <li>Type ls to make sure the zip file is there</li>
+            <li>Type: unzip WebOutput.zip</li>
+            <li>Type this to change the name of "Website Output" to "flaretest":<p>mv Website\ Output flaretest</p></li>
+         <li>Type this to make the second directory:  <p>cp -r flaretestDCA </p></li>
+		<li>Type this to go to the workspace:  <p>cd /workplace/beelliot/DCA-DC-Docs/src/DCA-DC-Docs/configuration/docroot</p></li>
+		</ol>
+
+       
+       
+        <h2>Copy files we created to workspace and update GIT</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li>Type this to copy the files into the docroot directory within the workspace</li>
+        </ol>
+        <p>cp -r /DCA-DC-Docs/flaretes*</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="2">
+            <li>Type ls -ltr to make sure the files had different dates</li>
+            <li>Type git status to see if Git identified the differences--you should get a bunch of stuff in red… the ones that say "modified" are just that. The other's are new.</li>
+            <li>Trim off everything up to filename or you'll get file not found:</li>
+        </ol>
+        <ol style="list-style-type: lower-alpha;margin-left: 72pt;" start="1">
+            <li>Try something like the below… keep trying until you get it cropped correctly:</li>
+        </ol>
+        <p>git status | grep modified | cut -c 15-</p>
+        <p>git status | grep flaretest | cut -c 9-</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="5">
+            <li>Make spaces in filenames OK: </li>
+        </ol>
+        <ol style="list-style-type: lower-alpha;margin-left: 72pt;" start="1">
+            <li>Type IFS=' and press Enter</li>
+            <li>Type ' and press Enter</li>
+        </ol>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="6">
+            <li>Type </li>
+        </ol>
+        <p>for i in `git status | grep modified | cut -c 15-`; do gitadd $i; done</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="7">
+            <li>Type:</li>
+        </ol>
+        <p>for i in `git status | grep flaretest | grep -v modified | cut -c 3-`; do gitadd $i; done</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>Deploy to Brazil</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li>Type brazil-build</li>
+            <li>Monitor pipelines here: <a href="https://pipelines.amazon.com/pipelines/DCA-DC-Docs">https://pipelines.amazon.com/pipelines/DCA-DC-Docs</a></li>
+            <li>Click&#160; a button when it gets to thru the Beta stage… a popup asks you to approve.</li>
+            <li>You can also monitor things here: <a href="https://apollo.amazon.com/environments/DCA-DC-Docs/stages/Beta">https://apollo.amazon.com/environments/DCA-DC-Docs/stages/Beta</a></li>
+        </ol>
+        <p>&#160;</p>
+        <p>Deploy on the high side:</p>
+        <ol style="list-style-type: decimal;margin-left: 36pt;" start="1">
+            <li>Go to <a href="https://apollo.amazon.com/homepage.html">https://apollo.amazon.com/homepage.html</a></li>
+            <li>Click the DCA-DC-Docs environment.</li>
+            <li>On the Gama tab, on the right side, under Deployment Actions, click Show.</li>
+            <li>Click Sync from another environment.</li>
+            <li>In the Environment textbox type import/DCA-DC-Docs.</li>
+            <li>In the Stage text box select Prod.</li>
+            <li>Click Sync.</li>
+        </ol>
+        <p>&#160;</p>
+        <p>
+            <img src="../Resources/Images/TempDoc1/03000001.png" style="visibility: visible;mso-wrap-style: square;width: 359px;height: 248px;" />
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>
